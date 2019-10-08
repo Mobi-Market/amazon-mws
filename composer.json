@@ -33,7 +33,7 @@
     },
     "scripts": {
         "format": [
-            "vendor/bin/php-cs-fixer fix --show-progress=dots"
+            "vendor/bin/php-cs-fixer fix"
         ],
         "php-stan": [
             "php -r \"@mkdir('reports', true);\"",
@@ -46,7 +46,7 @@
             "vendor/bin/phpcpd --progress src"
         ],
         "php-cpd-build": [
-            "vendor/bin/phpcpd --progress --log-pmd=reports/phpcpd.pmd.xml src"
+            "vendor/bin/phpcpd --progress"
         ]
     }
 }
