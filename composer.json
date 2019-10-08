@@ -40,13 +40,12 @@
             "vendor/bin/phpstan analyse -l 0 -c phpstan.neon > reports/phpstan.log"
         ],
         "php-stan-build": [
-            "vendor/bin/phpstan analyse -l 0 -c phpstan.neon --no-progress --no-ansi --error-format=checkstyle > reports/phpstan.checkstyle.xml"
+            "vendor/bin/phpstan analyse -l 0 -c phpstan.neon --no-progress --no-ansi --error-format=checkstyle"
         ],
         "php-cpd": [
             "vendor/bin/phpcpd --progress src"
         ],
         "php-cpd-build": [
-            "php -r \"@mkdir('reports', true);\"",
             "vendor/bin/phpcpd --progress --log-pmd=reports/phpcpd.pmd.xml src"
         ]
     }
