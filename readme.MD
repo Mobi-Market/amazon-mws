@@ -1,7 +1,7 @@
 # Amazon Marketplace Webservices
-[![Latest Stable Version](https://poser.pugx.org/autumndev/amazon-mws/v/stable)](https://packagist.org/packages/autumndev/amazon-mws) [![Latest Unstable Version](https://poser.pugx.org/autumndev/amazon-mws/v/unstable)](https://packagist.org/packages/autumndev/amazon-mws) [![License](https://poser.pugx.org/autumndev/amazon-mws/license)](https://packagist.org/packages/autumndev/amazon-mws) [![Total Downloads](https://poser.pugx.org/autumndev/amazon-mws/downloads)](https://packagist.org/packages/autumndev/amazon-mws)
+[![Latest Stable Version](https://poser.pugx.org/autumndev/amazon-mws/v/stable)](https://packagist.org/packages/autumndev/amazon-mws) [![Latest Unstable Version](https://poser.pugx.org/autumndev/amazon-mws/v/unstable)](https://packagist.org/packages/autumndev/amazon-mws) [![License](https://poser.pugx.org/autumndev/amazon-mws/license)](https://packagist.org/packages/autumndev/amazon-mws) [![Total Downloads](https://poser.pugx.org/autumndev/amazon-mws/downloads)](https://packagist.org/packages/autumndev/amazon-mws)[![Build Status](https://travis-ci.org/autumndev/amazon-mws.svg?branch=master)](https://travis-ci.org/autumndev/amazon-mws)
 
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQG5EWN987PJW)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQ8HVTZKX3S3A)
 
 Interaction with the Amazon Api for vendors called MWS
 
