@@ -73,6 +73,20 @@ class MWSClient
         $this->config['Region_Host'] = $this->MarketplaceIds[$this->config['Marketplace_Id']];
         $this->config['Region_Url'] = 'https://' . $this->config['Region_Host'];
     }
+    /**
+     * allows the override of a specific cpnfig value at run time
+     *
+     * @param string $key
+     * @param mixed $value
+     * 
+     * @return void
+     */
+    public function overrideConfig(string $key, mixed $value)
+    {
+        if (array_key_exists($key, $this->config)) {
+            $this->config[$key] = $value;
+        }
+    }
 
     /**
      * Call this method to get the raw feed instead of sending it
@@ -920,7 +934,6 @@ class MWSClient
             'offer-image2', 'offer-image3', 'offer-image4', 'offer-image5'
         ];
 
-        $csv->insertOne($header);
         $csv->insertOne($header);
 
         foreach ($MWSProduct as $product) {

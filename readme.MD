@@ -28,6 +28,12 @@ if ($client->validateCredentials()) {
     // Credentials are not valid
 }
 ```
+
+### Runtime Config updates
+```php
+$client->overrideConfig('config item', 'value');
+```
+
 ### Get orders
 ```php
 $fromDate = new DateTime('2016-01-01');
