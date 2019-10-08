@@ -6,6 +6,7 @@ php:
   - nightly
 before_script:
   - composer install
+script:
   - composer format
   - composer php-stan-build
   - composer php-cpd-build
