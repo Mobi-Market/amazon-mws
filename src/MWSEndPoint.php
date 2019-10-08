@@ -5,7 +5,6 @@ use Exception;
 
 class MWSEndPoint
 {
-
     public static $endpoints = [
         'ListRecommendations' => [
             'method' => 'POST',

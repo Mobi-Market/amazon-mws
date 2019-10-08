@@ -28,12 +28,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Autumndev\\MCS\\": "src"
+            "Autumndev\\MWS\\": "src/"
         }
     },
     "scripts": {
         "format": [
-            "vendor/bin/php-cs-fixer fix"
+            "vendor/bin/php-cs-fixer fix src"
         ],
         "php-stan": [
             "php -r \"@mkdir('reports', true);\"",
@@ -46,7 +46,7 @@
             "vendor/bin/phpcpd --progress src"
         ],
         "php-cpd-build": [
-            "vendor/bin/phpcpd --progress"
+            "vendor/bin/phpcpd --progress src"
         ]
     }
 }
