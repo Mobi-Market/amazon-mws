@@ -1,0 +1,7 @@
+parameters:
+    autoload_files:
+        - %currentWorkingDirectory%vendor/autoload.php
+    fileExtensions:
+        - php
+    paths:
+        - %currentWorkingDirectory%/src

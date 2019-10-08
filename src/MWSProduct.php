@@ -1,24 +1,30 @@
 <?php 
-namespace MCS;
+namespace Autumndev\MWS;
 
-use Exception;
+class MWSProduct
+{
+    const   COND_NEW                = 'New';
+    const   COND_REFURBISHED        = 'Refurbished';
+    const   COND_USED_LIKE_NEW      = 'UsedLikeNew';
+    const   COND_USED_VERY_GOOD     = 'UsedVeryGood';
+    const   COND_USED_GOOD          = 'UsedGood';
+    const   COND_USED_ACCEPTABLE    = 'UsedAcceptable';
 
-class MWSProduct{
-
+    /**
+     * @var string
+     */
     public $sku;
-    public $price;
-    public $quantity = 0;
-    public $product_id;
     public $product_id_type;
-    public $condition_type = 'New';
+    public $condition_type;
     public $condition_note;
+    public $product_id;
+    /**
+     * @var integer
+     */
+    public $price;
+    public $quantity;
     
     private $validation_errors = [];
-    
-    private $conditions = [
-        'New', 'Refurbished', 'UsedLikeNew', 
-        'UsedVeryGood', 'UsedGood', 'UsedAcceptable'
-    ];
     
     public function __construct(array $array = [])
     {
@@ -26,39 +32,43 @@ class MWSProduct{
             $this->{$property} = $value;
         }
     }
-    
-    public function getValidationErrors()
+    /**
+     * returns an array of validation errors
+     *
+     * @return array
+     */
+    public function getValidationErrors(): array
     {
         return $this->validation_errors;   
     }
-    
-    public function toArray()
+    /**
+     * converts the product object to array
+     *
+     * @return array
+     */
+    public function toArray(): array
     {
-        return [
-            'sku' => $this->sku,
-            'price' => $this->price,
-            'quantity' => $this->quantity,
-            'product_id' => $this->product_id,
-            'product_id_type' => $this->product_id_type,
-            'condition_type' => $this->condition_type,
-            'condition_note' => $this->condition_note,
-        ];
+        return (array) $this;
     }
-    
-    public function validate()
+    /**
+     * validates a product
+     *
+     * @return bool
+     */
+    public function validate(): bool
     {
-        if (mb_strlen($this->sku) < 1 or strlen($this->sku) > 40) {
+        if (\mb_strlen($this->sku) < 1 or \strlen($this->sku) > 40) {
             $this->validation_errors['sku'] = 'Should be longer then 1 character and shorter then 40 characters';
         }
         
-        $this->price = str_replace(',', '.', $this->price);
+        $this->price = \str_replace(',', '.', $this->price);
         
-        $exploded_price = explode('.', $this->price);
+        $exploded_price = \explode('.', $this->price);
         
-        if (count($exploded_price) == 2) {
-            if (mb_strlen($exploded_price[0]) > 18) { 
+        if (\count($exploded_price) == 2) {
+            if (\mb_strlen($exploded_price[0]) > 18) { 
                 $this->validation_errors['price'] = 'Too high';        
-            } else if (mb_strlen($exploded_price[1]) > 2) {
+            } else if (\mb_strlen($exploded_price[1]) > 2) {
                 $this->validation_errors['price'] = 'Too many decimals';    
             }
         } else {
@@ -68,7 +78,7 @@ class MWSProduct{
         $this->quantity = (int) $this->quantity;
         $this->product_id = (string) $this->product_id;
         
-        $product_id_length = mb_strlen($this->product_id);
+        $product_id_length = \mb_strlen($this->product_id);
         
         switch ($this->product_id_type) {
             case 'ASIN':
@@ -90,12 +100,12 @@ class MWSProduct{
                $this->validation_errors['product_id_type'] = 'Not one of: ASIN,UPC,EAN';        
         }
         
-        if (!in_array($this->condition_type, $this->conditions)) {
-            $this->validation_errors['condition_type'] = 'Not one of: ' . implode($this->conditions, ',');                
+        if (!\in_array($this->condition_type, $this->conditions)) {
+            $this->validation_errors['condition_type'] = 'Not one of: ' . \implode(',', $this->conditions);                
         }
         
         if ($this->condition_type != 'New') {
-            $length = mb_strlen($this->condition_note);
+            $length = \mb_strlen($this->condition_note);
             if ($length < 1) {
                 $this->validation_errors['condition_note'] = 'Required if condition_type not is New';                    
             } else if ($length > 1000) {
@@ -103,16 +113,10 @@ class MWSProduct{
             }
         }
         
-        if (count($this->validation_errors) > 0) {
+        if (\count($this->validation_errors) > 0) {
             return false;    
         } else {
             return true;    
         }
-    }
-    
-    public function __set($property, $value) {
-        if (property_exists($this, $property)) {
-            return $this->$property;
-        }
-    }    
+    } 
 }

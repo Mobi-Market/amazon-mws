@@ -1,0 +1,11 @@
+language: php
+php: 
+  - '7.0'
+  - '7.2'
+  - hhvm # on Trusty only
+  - nightly
+before_script:
+  - composer install
+  - composer format
+  - composer php-stan-build
+  - composer php-cpd-build

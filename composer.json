@@ -1,5 +1,5 @@
 {
-    "name": "mcs/amazon-mws",
+    "name": "autumndev/amazon-mws",
     "description": "Library to interface with Amazon MWS",
     "license": "MIT",
     "keywords": ["amazon", "mws"],
@@ -8,20 +8,46 @@
         {
             "name": "Michiel Meertens",
             "email": "meertensmichiel28@gmail.com"
+        },
+        {
+            "name": "Scott-David Jones",
+            "email": "sayhi@autumndev.co.uk"
         }
     ],
     "require": {
-        "php": ">= 5.4",
+        "php": ">= 7",
         "guzzlehttp/guzzle": "~6.0",
         "spatie/array-to-xml": "^2.1",
         "league/csv": "^8.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7"
+        "phpunit/phpunit": "^8",
+        "friendsofphp/php-cs-fixer": "^2.15@dev",
+        "phpstan/phpstan": "^0.11.0@dev",
+        "sebastian/phpcpd": "^4.1"
     },
     "autoload": {
         "psr-4": {
-            "MCS\\": "src"
+            "Autumndev\\MCS\\": "src"
         }
+    },
+    "scripts": {
+        "format": [
+            "vendor/bin/php-cs-fixer fix --show-progress=dots"
+        ],
+        "php-stan": [
+            "php -r \"@mkdir('reports', true);\"",
+            "vendor/bin/phpstan analyse -l 0 -c phpstan.neon > reports/phpstan.log"
+        ],
+        "php-stan-build": [
+            "vendor/bin/phpstan analyse -l 0 -c phpstan.neon --no-progress --no-ansi --error-format=checkstyle > reports/phpstan.checkstyle.xml"
+        ],
+        "php-cpd": [
+            "vendor/bin/phpcpd --progress src"
+        ],
+        "php-cpd-build": [
+            "php -r \"@mkdir('reports', true);\"",
+            "vendor/bin/phpcpd --progress --log-pmd=reports/phpcpd.pmd.xml src"
+        ]
     }
 }

@@ -1,9 +1,10 @@
 <?php
-namespace MCS;
+namespace Autumndev\MWS;
 
 use Exception;
 
-class MWSEndPoint{
+class MWSEndPoint
+{
 
     public static $endpoints = [
         'ListRecommendations' => [

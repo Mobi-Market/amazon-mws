@@ -1,5 +1,5 @@
 <?php
-namespace MCS;
+namespace Autumndev\MWS;
 
 use DateTime;
 use Exception;
@@ -12,36 +12,38 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\BadResponseException;
 use Spatie\ArrayToXml\ArrayToXml;
 
-class MWSClient{
+class MWSClient
+{
 
     const SIGNATURE_METHOD = 'HmacSHA256';
     const SIGNATURE_VERSION = '2';
     const DATE_FORMAT = "Y-m-d\TH:i:s.\\0\\0\\0\\Z";
-    const APPLICATION_NAME = 'MCS/MwsClient';
 
     private $config = [
-        'Seller_Id' => null,
-        'Marketplace_Id' => null,
-        'Access_Key_ID' => null,
-        'Secret_Access_Key' => null,
-        'MWSAuthToken' => null,
-        'Application_Version' => '0.0.*'
+        'Seller_Id'             => null,
+        'Marketplace_Id'        => null,
+        'Access_Key_ID'         => null,
+        'Secret_Access_Key'     => null,
+        'MWSAuthToken'          => null,
+        'Application_Version'   => '0.0.*',
+        'Application_Name'      => '',
+        'PurgeAndReplace'       => false,
     ];
 
     private $MarketplaceIds = [
-        'A2EUQ1WTGCTBG2' => 'mws.amazonservices.ca',
-        'ATVPDKIKX0DER' => 'mws.amazonservices.com',
-        'A1AM78C64UM0Y8' => 'mws.amazonservices.com.mx',
-        'A1PA6795UKMFR9' => 'mws-eu.amazonservices.com',
-        'A1RKKUPIHCS9HS' => 'mws-eu.amazonservices.com',
-        'A13V1IB3VIYZZH' => 'mws-eu.amazonservices.com',
-        'A21TJRUUN4KGV' => 'mws.amazonservices.in',
-        'APJ6JRA9NG5V4' => 'mws-eu.amazonservices.com',
-        'A1F83G8C2ARO7P' => 'mws-eu.amazonservices.com',
-        'A1VC38T7YXB528' => 'mws.amazonservices.jp',
-        'AAHKV2X7AFYLW' => 'mws.amazonservices.com.cn',
-        'A39IBJ37TRP1C6' => 'mws.amazonservices.com.au',
-	'A2Q3Y263D00KWC' => 'mws.amazonservices.com'
+        'A2EUQ1WTGCTBG2'    => 'mws.amazonservices.ca',
+        'ATVPDKIKX0DER'     => 'mws.amazonservices.com',
+        'A1AM78C64UM0Y8'    => 'mws.amazonservices.com.mx',
+        'A1PA6795UKMFR9'    => 'mws-eu.amazonservices.com',
+        'A1RKKUPIHCS9HS'    => 'mws-eu.amazonservices.com',
+        'A13V1IB3VIYZZH'    => 'mws-eu.amazonservices.com',
+        'A21TJRUUN4KGV'     => 'mws.amazonservices.in',
+        'APJ6JRA9NG5V4'     => 'mws-eu.amazonservices.com',
+        'A1F83G8C2ARO7P'    => 'mws-eu.amazonservices.com',
+        'A1VC38T7YXB528'    => 'mws.amazonservices.jp',
+        'AAHKV2X7AFYLW'     => 'mws.amazonservices.com.cn',
+        'A39IBJ37TRP1C6'    => 'mws.amazonservices.com.au',
+	    'A2Q3Y263D00KWC'    => 'mws.amazonservices.com'
     ];
 
     protected $debugNextFeed = false;
@@ -57,7 +59,7 @@ class MWSClient{
         }
 
         $required_keys = [
-            'Marketplace_Id', 'Seller_Id', 'Access_Key_ID', 'Secret_Access_Key'
+            'Marketplace_Id', 'Seller_Id', 'Access_Key_ID', 'Secret_Access_Key', 'Application_Name',
         ];
 
         foreach ($required_keys as $key) {
@@ -70,7 +72,6 @@ class MWSClient{
             throw new Exception('Invalid Marketplace Id');
         }
 
-        $this->config['Application_Name'] = self::APPLICATION_NAME;
         $this->config['Region_Host'] = $this->MarketplaceIds[$this->config['Marketplace_Id']];
         $this->config['Region_Url'] = 'https://' . $this->config['Region_Host'];
 
@@ -88,7 +89,7 @@ class MWSClient{
      * A method to quickly check if the supplied credentials are valid
      * @return boolean
      */
-    public function validateCredentials()
+    public function validateCredentials(): bool
     {
         try{
             $this->ListOrderItems('validate');
@@ -919,7 +920,7 @@ class MWSClient{
             $MWSProduct = [$MWSProduct];
         }
 
-        $csv = Writer::createFromFileObject(new SplTempFileObject());
+        $csv = Writer::createFromFileObject(new SplTempFileObject(50));
 
         $csv->setDelimiter("\t");
         $csv->setInputEncoding('iso-8859-1');
@@ -973,7 +974,7 @@ class MWSClient{
      * @param boolean $debug Return the generated xml and don't send it to amazon
      * @return array
      */
-    public function SubmitFeed($FeedType, $feedContent, $debug = false, $options = [])
+    public function SubmitFeed($FeedType, $feedContent, $debug = false)
     {
 
         if (is_array($feedContent)) {
@@ -993,20 +994,16 @@ class MWSClient{
             $this->debugNextFeed = false;
             return $feedContent;
         }
-
-	$purgeAndReplace = isset($options['PurgeAndReplace']) ? $options['PurgeAndReplace'] : false;
 	    
         $query = [
-            'FeedType' => $FeedType,
-            'PurgeAndReplace' => ($purgeAndReplace ? 'true' : 'false'),
-            'Merchant' => $this->config['Seller_Id'],
-            'MarketplaceId.Id.1' => false,
-            'SellerId' => false,
+            'FeedType'              => $FeedType,
+            'PurgeAndReplace'       => $this->config['PurgeAndReplace'],
+            'Merchant'              => $this->config['Seller_Id'],
+            'MarketplaceId.Id.1'    => false,
+            'SellerId'              => false,
         ];
 
-        //if ($FeedType === '_POST_PRODUCT_PRICING_DATA_') {
         $query['MarketplaceIdList.Id.1'] = $this->config['Marketplace_Id'];
-        //}
 
         $response = $this->request(
             'SubmitFeed',
