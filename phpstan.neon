@@ -1,6 +1,6 @@
 parameters:
     autoload_files:
-        - %currentWorkingDirectory%vendor/autoload.php
+        - %currentWorkingDirectory%/vendor/autoload.php
     fileExtensions:
         - php
     paths:

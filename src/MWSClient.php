@@ -4,7 +4,7 @@ namespace Autumndev\MWS;
 use DateTime;
 use Exception;
 use DateTimeZone;
-use MCS\MWSEndPoint;
+use Autumndev\MWS\MWSEndPoint;
 use League\Csv\Reader;
 use League\Csv\Writer;
 use SplTempFileObject;
@@ -1000,7 +1000,7 @@ class MWSClient
      * Convert an array to xml
      * @param $array array to convert
      * @param $customRoot [$customRoot = 'AmazonEnvelope']
-     * @return sting
+     * @return string
      */
     private function arrayToXml(array $array, $customRoot = 'AmazonEnvelope')
     {

@@ -99,9 +99,9 @@ class MWSProduct
             default:
                $this->validation_errors['product_id_type'] = 'Not one of: ASIN,UPC,EAN';
         }
-        
-        if (!\in_array($this->condition_type, $this->conditions)) {
-            $this->validation_errors['condition_type'] = 'Not one of: ' . \implode(',', $this->conditions);
+        $conditions = $this->getConditions();
+        if (!\in_array($this->condition_type, $conditions)) {
+            $this->validation_errors['condition_type'] = 'Not one of: ' . \implode(',', $conditions);
         }
         
         if ($this->condition_type != 'New') {
@@ -118,5 +118,21 @@ class MWSProduct
         } else {
             return true;
         }
+    }
+    /**
+     * wrapps all the conditions into an array
+     *
+     * @return array
+     */
+    public function getConditions(): array
+    {
+        return [
+            self::COND_NEW,
+            self::COND_REFURBISHED,
+            self::COND_USED_ACCEPTABLE,
+            self::COND_USED_GOOD,
+            self::COND_USED_LIKE_NEW,
+            self::COND_USED_VERY_GOOD,
+        ];
     }
 }
