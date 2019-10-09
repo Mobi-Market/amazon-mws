@@ -81,7 +81,7 @@ class MWSClient
      * 
      * @return void
      */
-    public function overrideConfig(string $key, mixed $value)
+    public function overrideConfig(string $key, $value)
     {
         if (array_key_exists($key, $this->config)) {
             $this->config[$key] = $value;
