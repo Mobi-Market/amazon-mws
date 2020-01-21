@@ -1,4 +1,5 @@
 <?php
+
 namespace Autumndev\MWS;
 
 use DateTime;
@@ -156,7 +157,7 @@ class MWSClient
         }
         return $array;
     }
-    
+
     /**
      * Returns the current competitive price of a product, based on SKU.
      * @param array [$sku_array = []]
@@ -428,13 +429,13 @@ class MWSClient
                 $data['NextToken'] = $response['ListOrdersResult']['NextToken'];
                 return $data;
             }
-        
+
             $response = $response['ListOrdersResult']['Orders']['Order'];
-        
+
             if (array_keys($response) !== range(0, count($response) - 1)) {
                 return [$response];
             }
-        
+
             return $response;
         } else {
             return [];
@@ -650,8 +651,7 @@ class MWSClient
                             $image = $product['AttributeSets']['ItemAttributes']['SmallImage']['URL'];
                             $array['medium_image'] = $image;
                             $array['small_image'] = str_replace('._SL75_', '._SL50_', $image);
-                            $array['large_image'] = str_replace('._SL75_', '', $image);
-                            ;
+                            $array['large_image'] = str_replace('._SL75_', '', $image);;
                         }
                         if (isset($product['Relationships']['VariationParent']['Identifiers']['MarketplaceASIN']['ASIN'])) {
                             $array['Parentage'] = 'child';
@@ -721,7 +721,7 @@ class MWSClient
         if (isset($response['ListMatchingProductsResult'])) {
             return $response['ListMatchingProductsResult'];
         } else {
-            return ['ListMatchingProductsResult'=>[]];
+            return ['ListMatchingProductsResult' => []];
         }
     }
 
@@ -899,7 +899,8 @@ class MWSClient
                         '_value' => strval($saleprice[$sku]['SalePrice']),
                         '_attributes' => [
                             'currency' => 'DEFAULT'
-                        ]]
+                        ]
+                    ]
                 ];
             }
         }
@@ -925,7 +926,8 @@ class MWSClient
 
         $csv->insertOne(['TemplateType=Offer', 'Version=2014.0703']);
 
-        $header = ['sku', 'price', 'quantity', 'product-id',
+        $header = [
+            'sku', 'price', 'quantity', 'product-id',
             'product-id-type', 'condition-type', 'condition-note',
             'ASIN-hint', 'title', 'product-tax-code', 'operation-type',
             'sale-price', 'sale-start-date', 'sale-end-date', 'leadtime-to-ship',
@@ -990,7 +992,7 @@ class MWSClient
             $this->debugNextFeed = false;
             return $feedContent;
         }
-        
+
         $query = [
             'FeedType'              => $FeedType,
             'PurgeAndReplace'       => $this->config['PurgeAndReplace'],
@@ -1122,7 +1124,7 @@ class MWSClient
 
         return false;
     }
-    
+
     /**
      * Get a list's inventory for Amazon's fulfillment
      *
@@ -1136,30 +1138,72 @@ class MWSClient
         if (count($sku_array) > 50) {
             throw new Exception('Maximum amount of SKU\'s for this call is 50');
         }
-    
+
         $counter = 1;
         $query = [
             'MarketplaceId' => $this->config['Marketplace_Id']
         ];
-    
+
         foreach ($sku_array as $key) {
             $query['SellerSkus.member.' . $counter] = $key;
             $counter++;
         }
-    
+
         $response = $this->request(
             'ListInventorySupply',
             $query
         );
-    
+
         $result = [];
         if (isset($response['ListInventorySupplyResult']['InventorySupplyList']['member'])) {
             foreach ($response['ListInventorySupplyResult']['InventorySupplyList']['member'] as $index => $ListInventorySupplyResult) {
                 $result[$index] = $ListInventorySupplyResult;
             }
         }
-        
+
         return $result;
+    }
+
+    /**
+     * Confirm shipment (_POST_FLAT_FILE_FULFILLMENT_DATA_)
+     * 
+     * @param  array $MWSOrderFulfilments or array of MWSProduct objects
+     * 
+     * @return array
+     */
+    public function confirmShipping(array $MWSOrderFulfilments): array
+    {
+        foreach ($MWSOrderFulfilments as $MWSOrderFulfilment) {
+            if (!$MWSOrderFulfilment instanceof MWSOrderFulfilment) {
+                throw new \Exception('Passed variable must be an array of \Autumndev\MWS\MWSOrderFulfilment objects');
+            }
+        }
+
+        $csv = Writer::createFromFileObject(new SplTempFileObject(50));
+
+        $csv->setDelimiter("\t");
+        $csv->setInputEncoding('iso-8859-1');
+
+        $header = [
+            'order-id',
+            'order-item-id',
+            'quantity',
+            'ship-date',
+            'carrier-code',
+            'carrier-name',
+            'tracking-number',
+            'ship-method',
+        ];
+
+        $csv->insertOne($header);
+
+        foreach ($MWSOrderFulfilments as $MWSOrderFulfilment) {
+            $csv->insertOne(
+                array_values($MWSOrderFulfilment->toArray())
+            );
+        }
+
+        return $this->SubmitFeed('_POST_FLAT_FILE_FULFILLMENT_DATA_', $csv);
     }
 
     /**
@@ -1209,10 +1253,8 @@ class MWSClient
                 $headers['Content-Type'] = 'text/xml; charset=iso-8859-1';
                 $headers['Host'] = $this->config['Region_Host'];
 
-                unset(
-                    $query['MarketplaceId.Id.1'],
-                    $query['SellerId']
-                );
+                unset($query['MarketplaceId.Id.1'],
+                $query['SellerId']);
             }
 
             $requestOptions = [
@@ -1226,19 +1268,19 @@ class MWSClient
                 hash_hmac(
                     'sha256',
                     $endPoint['method']
-                    . "\n"
-                    . $this->config['Region_Host']
-                    . "\n"
-                    . $endPoint['path']
-                    . "\n"
-                    . http_build_query($query, null, '&', PHP_QUERY_RFC3986),
+                        . "\n"
+                        . $this->config['Region_Host']
+                        . "\n"
+                        . $endPoint['path']
+                        . "\n"
+                        . http_build_query($query, null, '&', PHP_QUERY_RFC3986),
                     $this->config['Secret_Access_Key'],
                     true
                 )
             );
 
             $requestOptions['query'] = $query;
-            
+
             if ($this->client === null) {
                 $this->client = new Client();
             }
@@ -1275,7 +1317,7 @@ class MWSClient
             throw new Exception($message);
         }
     }
-    
+
     public function setClient(Client $client)
     {
         $this->client = $client;

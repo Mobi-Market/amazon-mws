@@ -1,4 +1,5 @@
 <?php
+
 namespace Autumndev\MWS;
 
 class MWSProduct
@@ -23,9 +24,9 @@ class MWSProduct
      */
     public $price;
     public $quantity;
-    
+
     private $validation_errors = [];
-    
+
     public function __construct(array $array = [])
     {
         foreach ($array as $property => $value) {
@@ -41,6 +42,7 @@ class MWSProduct
     {
         return $this->validation_errors;
     }
+
     /**
      * converts the product object to array
      *
@@ -48,7 +50,15 @@ class MWSProduct
      */
     public function toArray(): array
     {
-        return (array) $this;
+        return [
+            'sku'               => $this->sku,
+            'price'             => $this->price,
+            'quantity'          => $this->quantity,
+            'product_id'        => $this->product_id,
+            'product_id_type'   => $this->product_id_type,
+            'condition_type'    => $this->condition_type,
+            'condition_note'    => $this->condition_note,
+        ];
     }
     /**
      * validates a product
@@ -60,11 +70,11 @@ class MWSProduct
         if (\mb_strlen($this->sku) < 1 or \strlen($this->sku) > 40) {
             $this->validation_errors['sku'] = 'Should be longer then 1 character and shorter then 40 characters';
         }
-        
+
         $this->price = \str_replace(',', '.', $this->price);
-        
+
         $exploded_price = \explode('.', $this->price);
-        
+
         if (\count($exploded_price) == 2) {
             if (\mb_strlen($exploded_price[0]) > 18) {
                 $this->validation_errors['price'] = 'Too high';
@@ -74,12 +84,12 @@ class MWSProduct
         } else {
             $this->validation_errors['price'] = 'Looks wrong';
         }
-        
+
         $this->quantity = (int) $this->quantity;
         $this->product_id = (string) $this->product_id;
-        
+
         $product_id_length = \mb_strlen($this->product_id);
-        
+
         switch ($this->product_id_type) {
             case 'ASIN':
                 if ($product_id_length != 10) {
@@ -97,13 +107,13 @@ class MWSProduct
                 }
                 break;
             default:
-               $this->validation_errors['product_id_type'] = 'Not one of: ASIN,UPC,EAN';
+                $this->validation_errors['product_id_type'] = 'Not one of: ASIN,UPC,EAN';
         }
         $conditions = $this->getConditions();
         if (!\in_array($this->condition_type, $conditions)) {
             $this->validation_errors['condition_type'] = 'Not one of: ' . \implode(',', $conditions);
         }
-        
+
         if ($this->condition_type != 'New') {
             $length = \mb_strlen($this->condition_note);
             if ($length < 1) {
@@ -112,12 +122,12 @@ class MWSProduct
                 $this->validation_errors['condition_note'] = 'Should not exceed 1000 characters';
             }
         }
-        
+
         if (\count($this->validation_errors) > 0) {
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     }
     /**
      * wrapps all the conditions into an array
