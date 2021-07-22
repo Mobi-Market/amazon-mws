@@ -1,38 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Autumndev\MWS;
 
 class MWSOrderFulfilment
 {
-    const DATE_FORMAT                           = "Y-m-d";
-    const CARRIER_CODE_BLUE_PACKAGE             = 'Blue Package';
-    const CARRIER_CODE_USPS                     = 'USPS';
-    const CARRIER_CODE_UPS                      = 'UPS';
-    const CARRIER_CODE_UPSMI                    = 'UPSMI';
-    const CARRIER_CODE_FEDEX                    = 'FedEx';
-    const CARRIER_CODE_DHL                      = 'DHL';
-    const CARRIER_CODE_DHL_GLOBAL_MAIL          = 'DHL Global Mail';
-    const CARRIER_CODE_FASTWAY                  = 'Fastway';
-    const CARRIER_CODE_UPS_MAIL_INNOVATIONS     = 'UPS Mail Innovations';
-    const CARRIER_CODE_LASERSHIP                = 'Lasership';
-    const CARRIER_CODE_ROYAL_MAIL               = 'Royal Mail';
-    const CARRIER_CODE_FEDEX_SMARTPOST          = 'FedEx SmartPost';
-    const CARRIER_CODE_OSM                      = 'OSM';
-    const CARRIER_CODE_ONTRAC                   = 'OnTrac';
-    const CARRIER_CODE_STREAMLITE               = 'Streamlite';
-    const CARRIER_CODE_NEWGISTICS               = 'Newgistics';
-    const CARRIER_CODE_CANADA_POST              = 'Canada Post';
-    const CARRIER_CODE_CITY_LINK                = 'City Link';
-    const CARRIER_CODE_GLS                      = 'GLS';
-    const CARRIER_CODE_GO                       = 'GO!';
-    const CARRIER_CODE_HERMES_LOGISTIK_GRUPPE   = 'Hermes Logistik Gruppe';
-    const CARRIER_CODE_PARCELFORCE              = 'Parcelforce';
-    const CARRIER_CODE_TNT                      = 'TNT';
-    const CARRIER_CODE_TARGET                   = 'Target';
-    const CARRIER_CODE_SAGAWAEXPRESSS           = 'SagawaExpress';
-    const CARRIER_CODE_NIPPONEXPRESS            = 'NipponExpress';
-    const CARRIER_CODE_YAMATOTRANSPORT          = 'YamatoTransport';
-    const CARRIER_CODE_OTHER                    = 'Other';
+    public const DATE_FORMAT                           = "Y-m-d";
+    public const CARRIER_CODE_BLUE_PACKAGE             = 'Blue Package';
+    public const CARRIER_CODE_USPS                     = 'USPS';
+    public const CARRIER_CODE_UPS                      = 'UPS';
+    public const CARRIER_CODE_UPSMI                    = 'UPSMI';
+    public const CARRIER_CODE_FEDEX                    = 'FedEx';
+    public const CARRIER_CODE_DHL                      = 'DHL';
+    public const CARRIER_CODE_DHL_GLOBAL_MAIL          = 'DHL Global Mail';
+    public const CARRIER_CODE_FASTWAY                  = 'Fastway';
+    public const CARRIER_CODE_UPS_MAIL_INNOVATIONS     = 'UPS Mail Innovations';
+    public const CARRIER_CODE_LASERSHIP                = 'Lasership';
+    public const CARRIER_CODE_ROYAL_MAIL               = 'Royal Mail';
+    public const CARRIER_CODE_FEDEX_SMARTPOST          = 'FedEx SmartPost';
+    public const CARRIER_CODE_OSM                      = 'OSM';
+    public const CARRIER_CODE_ONTRAC                   = 'OnTrac';
+    public const CARRIER_CODE_STREAMLITE               = 'Streamlite';
+    public const CARRIER_CODE_NEWGISTICS               = 'Newgistics';
+    public const CARRIER_CODE_CANADA_POST              = 'Canada Post';
+    public const CARRIER_CODE_CITY_LINK                = 'City Link';
+    public const CARRIER_CODE_GLS                      = 'GLS';
+    public const CARRIER_CODE_GO                       = 'GO!';
+    public const CARRIER_CODE_HERMES_LOGISTIK_GRUPPE   = 'Hermes Logistik Gruppe';
+    public const CARRIER_CODE_PARCELFORCE              = 'Parcelforce';
+    public const CARRIER_CODE_TNT                      = 'TNT';
+    public const CARRIER_CODE_TARGET                   = 'Target';
+    public const CARRIER_CODE_SAGAWAEXPRESSS           = 'SagawaExpress';
+    public const CARRIER_CODE_NIPPONEXPRESS            = 'NipponExpress';
+    public const CARRIER_CODE_YAMATOTRANSPORT          = 'YamatoTransport';
+    public const CARRIER_CODE_OTHER                    = 'Other';
 
     public $orderId         = null;
     public $orderItemId     = null;
@@ -134,10 +136,11 @@ class MWSOrderFulfilment
 
         return true;
     }
+
     /**
-     * retutns a list of valid carrier coes
-     * 
-     * @return array 
+     * returns a list of valid carrier codes
+     *
+     * @return array
      */
     public function getCarrierCodes(): array
     {

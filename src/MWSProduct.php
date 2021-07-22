@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Autumndev\MWS;
 
 class MWSProduct
 {
-    const   COND_NEW                = 'New';
-    const   COND_REFURBISHED        = 'Refurbished';
-    const   COND_USED_LIKE_NEW      = 'UsedLikeNew';
-    const   COND_USED_VERY_GOOD     = 'UsedVeryGood';
-    const   COND_USED_GOOD          = 'UsedGood';
-    const   COND_USED_ACCEPTABLE    = 'UsedAcceptable';
+    public const   COND_NEW                = 'New';
+    public const   COND_REFURBISHED        = 'Refurbished';
+    public const   COND_USED_LIKE_NEW      = 'UsedLikeNew';
+    public const   COND_USED_VERY_GOOD     = 'UsedVeryGood';
+    public const   COND_USED_GOOD          = 'UsedGood';
+    public const   COND_USED_ACCEPTABLE    = 'UsedAcceptable';
 
     /**
      * @var string
@@ -20,7 +22,7 @@ class MWSProduct
     public $condition_note;
     public $product_id;
     /**
-     * @var integer
+     * @var int|string
      */
     public $price;
     public $quantity;
@@ -71,8 +73,7 @@ class MWSProduct
             $this->validation_errors['sku'] = 'Should be longer then 1 character and shorter then 40 characters';
         }
 
-        $this->price = \str_replace(',', '.', $this->price);
-
+        $this->price = \str_replace(',', '.', (string) $this->price);
         $exploded_price = \explode('.', $this->price);
 
         if (\count($exploded_price) == 2) {

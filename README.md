@@ -1,13 +1,11 @@
 # Amazon Marketplace Webservices
-[![Latest Stable Version](https://poser.pugx.org/autumndev/amazon-mws/v/stable)](https://packagist.org/packages/autumndev/amazon-mws) [![Latest Unstable Version](https://poser.pugx.org/autumndev/amazon-mws/v/unstable)](https://packagist.org/packages/autumndev/amazon-mws) [![License](https://poser.pugx.org/autumndev/amazon-mws/license)](https://packagist.org/packages/autumndev/amazon-mws) [![Total Downloads](https://poser.pugx.org/autumndev/amazon-mws/downloads)](https://packagist.org/packages/autumndev/amazon-mws) [![Build Status](https://travis-ci.org/autumndev/amazon-mws.svg?branch=master)](https://travis-ci.org/autumndev/amazon-mws)
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FQ8HVTZKX3S3A)
+[![Latest Stable Version](https://poser.pugx.org/mobi-market/amazon-mws/v/stable)](https://packagist.org/packages/mobi-market/amazon-mws) [![Latest Unstable Version](https://poser.pugx.org/mobi-market/amazon-mws/v/unstable)](https://packagist.org/packages/mobi-market/amazon-mws) [![License](https://poser.pugx.org/mobi-market/amazon-mws/license)](https://packagist.org/packages/mobi-market/amazon-mws) [![Total Downloads](https://poser.pugx.org/mobi-market/amazon-mws/downloads)](https://packagist.org/packages/mobi-market/amazon-mws) [![Build Status](https://travis-ci.org/mobi-market/amazon-mws.svg?branch=master)](https://travis-ci.org/mobi-market/amazon-mws)
 
 Interaction with the Amazon Api for vendors called MWS
 
 ### Installation:
 ```bash
-$ composer require autumndev/amazon-mws
+$ composer require mobi-market/amazon-mws
 ```
 ### Initiate the client
 ```php
@@ -66,10 +64,10 @@ $product->quantity = 10;
 
 if ($product->validate()) {
     // You can also submit an array of MWSProduct objects
-    $result = $client->postProduct($product);    
+    $result = $client->postProduct($product);
 } else {
-    $errors = $product->getValidationErrors();        
-}  
+    $errors = $product->getValidationErrors();
+}
 ```
 
 ### Update product stock
