@@ -1324,10 +1324,10 @@ class MWSClient
                 $message = (string) $message->getBody();
                 if (strpos($message, '<ErrorResponse') !== false) {
                     $error = simplexml_load_string($message);
-                    $message = $error->Error->Message;
+                    $message = (string) ($error->Error->Message ?? $message);
                 }
             } else {
-                $message = 'An error occured';
+                $message = 'An error occurred';
             }
             throw new Exception($message);
         }
