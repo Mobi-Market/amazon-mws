@@ -1014,7 +1014,7 @@ class MWSClient
         $response = $this->request(
             'SubmitFeed',
             $query,
-            $feedContent
+            $feedContent->toString()
         );
 
         return $response['SubmitFeedResult']['FeedSubmissionInfo'];
