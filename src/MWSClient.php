@@ -992,6 +992,8 @@ class MWSClient
                     ],
                 ], $feedContent)
             );
+        } else {
+            $feedContent = $feedContent->toString();
         }
 
         if ($debug === true) {
@@ -1014,7 +1016,7 @@ class MWSClient
         $response = $this->request(
             'SubmitFeed',
             $query,
-            $feedContent->toString()
+            $feedContent
         );
 
         return $response['SubmitFeedResult']['FeedSubmissionInfo'];
